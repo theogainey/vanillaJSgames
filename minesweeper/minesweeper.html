@@ -9,6 +9,7 @@
     body {
       padding: 0;
       margin: 0;
+      display: flex;
       justify-content: center;
       align-items: center;
       text-align: center;
@@ -21,9 +22,16 @@
   <main>
     <h1>Minesweeper</h1>
     <canvas id='myCanvas' width="506" height="406"></canvas>
-    <div>
+    <div style="width: 506px;">
       <div id='newGameInput'></div>
       <button id='resetButon'>New Game</button>
+      <h3>Instructions</h3>
+      <p>Click a square to reveal if it contains a mine.
+      When clicked, if a square does not contain a mine, the square will reveal the number of mines adjacent to the square.
+      If the square contains no adjacent mines, all adjacent squares will be automatically clicked for you.
+       Hold the shift key then click to flag a square you believe contains a mine.
+      The game is won when all squares containing mines are marked with flags and every square not containing a mine is clicked.
+      IIf you click a square containing a mine, you lose.</p>
     </div>
     <div>
       <a href="../index.html"> <p>Back To Home</p></a>
