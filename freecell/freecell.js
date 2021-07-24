@@ -2,6 +2,9 @@ var canvas;
 var ctx;
 var game;
 var newGameButton;
+var undoButton;
+var moveStack;
+
 function draw(){
   canvas = document.getElementById('myCanvas');
   canvas.addEventListener('click',(e) => {
