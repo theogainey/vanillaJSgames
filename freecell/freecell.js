@@ -1,11 +1,35 @@
 var canvas;
 var ctx;
 var game;
-var newGameButton;
 var undoButton;
-var moveStack;
+var newGameButton;
 
 function draw(){
+  ctx.clearRect(0, 0, 695, 406);
+  ctx.fillStyle = 'rgb(37, 128, 25)';
+  ctx.fillRect(0, 0, 695, 406);
+  game.cascades.forEach((item) => {
+    item.reDraw();
+  });
+  game.freecells.forEach((item) => {
+    if (item.card) {
+      item.card.drawCard();
+    }
+    else {
+      item.drawSpace();
+    }
+  });
+  game.foundations.forEach((item) => {
+    if (item.stackPointer) {
+      item.cards[item.stackPointer].cardData.drawCard();
+    }
+    else {
+      item.drawSpace();
+    }
+  });
+}
+
+function loadCanvas(){
   canvas = document.getElementById('myCanvas');
   canvas.addEventListener('click',(e) => {
     game.cascades.forEach((item) => {
@@ -17,7 +41,19 @@ function draw(){
     game.freecells.forEach((item) => {
       item.clickHandler(e.offsetX, e.offsetY,);
     });
+    draw();
+    if (game.selectedCard) {
+      game.selectedCard.setNewXY( e.offsetX, e.offsetY );
+
+    }
   });
+  canvas.addEventListener('mousemove', e => {
+  if (game.selectedCard) {
+    draw();
+    game.selectedCard.setNewXY( e.offsetX, e.offsetY );
+  }
+});
+
   ctx = canvas.getContext('2d');
   newGameButton = document.getElementById('newGameButton');
   newGameButton.addEventListener('click',(e) => {
@@ -31,8 +67,9 @@ function draw(){
   ctx.fillStyle = 'rgb(37, 128, 25)';
   ctx.fillRect(0, 0, 695, 406);
   game = new FreeCellGame();
-  moveStack = new MoveStack();
 }
+
+
 function handleNewGameButton(){
   ctx.fillStyle = 'rgb(37, 128, 25)';
   ctx.fillRect(0, 0, 695, 406);
@@ -69,6 +106,8 @@ function handleUndoMove(){
       game.freecells[previousLocation-8].push(cardBeingMoved);
     }
   }
+  draw();
+
   }
 }
 class MoveStack {
