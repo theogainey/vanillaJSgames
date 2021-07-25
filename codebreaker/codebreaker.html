@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Breaker</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+  </style>
+  <script src="./codebreaker.js"></script>
+</head>
+
+<body onload="loadCanvas();">
+  <main>
+    <h1>Code Breaker</h1>
+    <div>
+      <label for="guessInput">Guess:</label>
+      <input type="text" id="guessInput" >
+      <button type="button" id="guessButton">Enter Guess</button>
+    </div>
+    <canvas id='myCanvas' width="400" height="400"></canvas>
+    <p>Built By Theo Gainey</p>
+  </main>
+</body>
+
+</html>
