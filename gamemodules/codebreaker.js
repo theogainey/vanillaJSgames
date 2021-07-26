@@ -3,16 +3,45 @@ var ctx;
 var inputField;
 var enterGuessButton;
 var game;
+var headingDiv;
+var buttonDiv;
+var canvasDiv;
 
-function loadCanvas() {
-  canvas = document.getElementById('myCanvas');
+export function unloadCodeBreaker(){
+  headingDiv.remove();
+  buttonDiv.remove();
+  canvasDiv.remove();
+}
+
+export function initCodeBreaker() {
+  headingDiv = document.createElement("div");
+  headingDiv.setAttribute("id", "headingDiv") ;
+  buttonDiv  = document.createElement("div");
+  buttonDiv.setAttribute("id", "buttonDiv") ;
+  canvasDiv = document.createElement("div");
+  canvasDiv.setAttribute("id", "canvasDiv") ;
+  document.getElementById("mainSection").appendChild(canvasDiv).appendChild(buttonDiv);
+  document.getElementById("headerSection").appendChild(headingDiv);
+  var heading =  document.createElement("h1");
+  heading.innerHTML = "Codebreaker";
+  document.getElementById("headingDiv").appendChild(heading);
+  canvas = document.createElement("canvas");
+  canvas.setAttribute("height", 400);
+  canvas.setAttribute("width", 400);
+
+  document.getElementById("canvasDiv").appendChild(canvas);
+
+
   ctx = canvas.getContext('2d');
-  enterGuessButton = document.getElementById('guessButton');
+
+  enterGuessButton = document.createElement("button");
+  enterGuessButton.innerHTML = "EnterGuess";
+  document.getElementById("buttonDiv").appendChild(enterGuessButton);
   enterGuessButton.addEventListener('click',(e) => {
     guessHandler();
   });
-  inputField=document.getElementById('guessInput');
-
+  inputField= document.createElement("input", { type : 'text' });
+  document.getElementById("buttonDiv").appendChild( inputField );
   game = new CodeBreakerGame();
 }
 

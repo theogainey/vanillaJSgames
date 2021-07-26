@@ -3,6 +3,71 @@ var ctx;
 var game;
 var undoButton;
 var newGameButton;
+var headingDiv;
+var buttonDiv;
+var canvasDiv;
+export function unloadFreecell(){
+  headingDiv.remove();
+  buttonDiv.remove();
+  canvasDiv.remove();
+}
+export function initFreecell(){
+  headingDiv = document.createElement("div");
+  headingDiv.setAttribute("id", "headingDiv") ;
+  buttonDiv  = document.createElement("div");
+  buttonDiv.setAttribute("id", "buttonDiv") ;
+  canvasDiv = document.createElement("div");
+  canvasDiv.setAttribute("id", "canvasDiv") ;
+  document.getElementById("mainSection").appendChild(buttonDiv).appendChild(canvasDiv);
+  document.getElementById("headerSection").appendChild(headingDiv);
+  var heading =  document.createElement("h1");
+  heading.innerHTML = "Freecell";
+  document.getElementById("headingDiv").appendChild(heading);
+  canvas = document.createElement("canvas");
+  canvas.setAttribute("width", 695);
+  canvas.setAttribute("height", 406);
+  document.getElementById("canvasDiv").appendChild(canvas);
+  ctx = canvas.getContext('2d');
+  canvas.addEventListener('click',(e) => {
+    game.cascades.forEach((item) => {
+      item.clickHandler(e.offsetX, e.offsetY,);
+    });
+    game.foundations.forEach((item) => {
+      item.clickHandler(e.offsetX, e.offsetY,);
+    });
+    game.freecells.forEach((item) => {
+      item.clickHandler(e.offsetX, e.offsetY,);
+    });
+    draw();
+    if (game.selectedCard) {
+      game.selectedCard.setNewXY( e.offsetX-38, e.offsetY -50);
+
+    }
+  });
+  canvas.addEventListener('mousemove', e => {
+  if (game.selectedCard) {
+    draw();
+    game.selectedCard.setNewXY( e.offsetX-38, e.offsetY -50 );
+  }
+});
+
+  newGameButton = document.createElement("button");
+  newGameButton.innerHTML = "New Game";
+  document.getElementById("buttonDiv").appendChild(newGameButton);
+  newGameButton.addEventListener('click',(e) => {
+    handleNewGameButton();
+  });
+  undoButton = document.createElement("button");
+  undoButton.innerHTML = "Undo Move";
+  document.getElementById("buttonDiv").appendChild(undoButton);
+  undoButton.addEventListener('click',(e) => {
+    handleUndoMove();
+  });
+
+  ctx.fillStyle = 'rgb(37, 128, 25)';
+  ctx.fillRect(0, 0, 695, 406);
+  game = new FreeCellGame();
+}
 
 function draw(){
   ctx.clearRect(0, 0, 695, 406);
@@ -28,47 +93,6 @@ function draw(){
     }
   });
 }
-
-function loadCanvas(){
-  canvas = document.getElementById('myCanvas');
-  canvas.addEventListener('click',(e) => {
-    game.cascades.forEach((item) => {
-      item.clickHandler(e.offsetX, e.offsetY,);
-    });
-    game.foundations.forEach((item) => {
-      item.clickHandler(e.offsetX, e.offsetY,);
-    });
-    game.freecells.forEach((item) => {
-      item.clickHandler(e.offsetX, e.offsetY,);
-    });
-    draw();
-    if (game.selectedCard) {
-      game.selectedCard.setNewXY( e.offsetX, e.offsetY );
-
-    }
-  });
-  canvas.addEventListener('mousemove', e => {
-  if (game.selectedCard) {
-    draw();
-    game.selectedCard.setNewXY( e.offsetX, e.offsetY );
-  }
-});
-
-  ctx = canvas.getContext('2d');
-  newGameButton = document.getElementById('newGameButton');
-  newGameButton.addEventListener('click',(e) => {
-    handleNewGameButton();
-  });
-  undoButton = document.getElementById('undoButton');
-  undoButton.addEventListener('click',(e) => {
-    handleUndoMove();
-  });
-
-  ctx.fillStyle = 'rgb(37, 128, 25)';
-  ctx.fillRect(0, 0, 695, 406);
-  game = new FreeCellGame();
-}
-
 
 function handleNewGameButton(){
   ctx.fillStyle = 'rgb(37, 128, 25)';
@@ -236,6 +260,9 @@ class Foundation{
     this.stackPointer= newKey;
     card.setNewXY(this.x, this.y);
     this.nextValue++;
+    if (this.nextValue===14) {
+      //check if others and full and if so win
+    }
   }
   pop(){
     if (this.stackPointer) {
@@ -345,6 +372,16 @@ class FreeCellGame{
       }
     });
     return cascades;
+  }
+  isWon(){
+    this.foundations.forEach((item) => {
+      if (item.nextValue<14) {
+        return
+      }
+    });
+    ctx.fillStyle ='red';
+    ctx.textAlign = 'center';
+    ctx.fillText("WINNER!!!!", 346, 203);
   }
 }
 

@@ -7,18 +7,44 @@ var prevN;
 var gameStatus;
 var resetButon;
 var gameCondition;
-function draw() {
-  canvas = document.getElementById('myCanvas');
+var headingDiv;
+var buttonDiv;
+var canvasDiv;
+
+export function unloadMineSweeper(){
+  headingDiv.remove();
+  buttonDiv.remove();
+  canvasDiv.remove();
+}
+
+export function initMineSweeper() {
+  headingDiv = document.createElement("div");
+  headingDiv.setAttribute("id", "headingDiv") ;
+  buttonDiv  = document.createElement("div");
+  buttonDiv.setAttribute("id", "buttonDiv") ;
+  canvasDiv = document.createElement("div");
+  canvasDiv.setAttribute("id", "canvasDiv") ;
+  document.getElementById("mainSection").appendChild(buttonDiv).appendChild(canvasDiv);
+  document.getElementById("headerSection").appendChild(headingDiv);
+  var heading =  document.createElement("h1");
+  heading.innerHTML = "Minesweeper";
+  document.getElementById("headingDiv").appendChild(heading);
+  canvas = document.createElement("canvas");
+  canvas.setAttribute("width", 506);
+  canvas.setAttribute("height", 406);
+  document.getElementById("canvasDiv").appendChild(canvas);
+  ctx = canvas.getContext('2d');
   canvas.addEventListener('click',(e) => {
     if(gameCondition==="play"){
       mousePressed(e);
     }
   });
-  resetButon = document.getElementById('resetButon');
+  resetButon = document.createElement("button");
+  resetButon.innerHTML = "New Game";
+  document.getElementById("buttonDiv").appendChild(resetButon);
   resetButon.addEventListener('click',(e) => {
     handleNewGameButton();
   });
-  ctx = canvas.getContext('2d');
   ctx.fillStyle = 'grey';
   ctx.fillRect(0, 0, 506, 406);
   prevN=10;
@@ -28,10 +54,7 @@ function draw() {
 function handleNewGameButton(){
   gameCondition="play";
   game = null;
-//  let n = newGameInput.value();
   clearGame();
-//  prevN=n;
-//  game = new MineSweeperGame(parseInt(n));
   game = new MineSweeperGame(10);
 }
 function clearGame(){
