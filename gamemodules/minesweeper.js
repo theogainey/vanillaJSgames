@@ -10,11 +10,12 @@ var gameCondition;
 var headingDiv;
 var buttonDiv;
 var canvasDiv;
-
+var instructionsDiv;
 export function unloadMineSweeper(){
   headingDiv.remove();
   buttonDiv.remove();
   canvasDiv.remove();
+  instructionsDiv.remove();
 }
 
 export function initMineSweeper() {
@@ -29,6 +30,19 @@ export function initMineSweeper() {
   var heading =  document.createElement("h1");
   heading.innerHTML = "Minesweeper";
   document.getElementById("headingDiv").appendChild(heading);
+
+  instructionsDiv = document.createElement("div");
+  instructionsDiv.setAttribute("id", "instructionsDiv");
+  document.getElementById("mainSection").appendChild(instructionsDiv);
+
+  var instructionsH2 = document.createElement("h2");
+  instructionsH2.innerHTML="instructions";
+  var instructionsP = document.createElement("p");
+  instructionsP.innerHTML = "Click a square to reveal if it contains a mine. When clicked, if a square does not contain a mine, the square will reveal the number of mines adjacent to the square. If the square contains no adjacent mines, all adjacent squares will be automatically clicked for you. Hold the shift key then click to flag a square you believe contains a mine. The game is won when all squares containing mines are marked with flags and every square not containing a mine is clicked. IIf you click a square containing a mine, you lose.";
+  document.getElementById("instructionsDiv").appendChild(instructionsH2);
+  document.getElementById("instructionsDiv").appendChild(instructionsP);
+
+
   canvas = document.createElement("canvas");
   canvas.setAttribute("width", 506);
   canvas.setAttribute("height", 406);
