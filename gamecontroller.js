@@ -69,7 +69,7 @@ function getGameList(){
   document.getElementById("codebreakerDiv").appendChild(startCodebreakerButton);
   startCodebreakerButton.addEventListener('click',(e) => {
     clearDoc();
-    startMinesweeper();
+    startCodeBreaker();
   });
 
 
