@@ -3,28 +3,28 @@ var ctx;
 var inputField;
 var enterGuessButton;
 var game;
-var headingDiv;
+var gameHeadingDiv;
 var buttonDiv;
 var canvasDiv;
 
 export function unloadCodeBreaker(){
-  headingDiv.remove();
+  gameHeadingDiv.remove();
   buttonDiv.remove();
   canvasDiv.remove();
 }
 
 export function initCodeBreaker() {
-  headingDiv = document.createElement("div");
-  headingDiv.setAttribute("id", "headingDiv") ;
+  gameHeadingDiv = document.createElement("div");
+  gameHeadingDiv.setAttribute("id", "gameHeadingDiv") ;
   buttonDiv  = document.createElement("div");
   buttonDiv.setAttribute("id", "buttonDiv") ;
   canvasDiv = document.createElement("div");
   canvasDiv.setAttribute("id", "canvasDiv") ;
   document.getElementById("mainSection").appendChild(canvasDiv).appendChild(buttonDiv);
-  document.getElementById("headerSection").appendChild(headingDiv);
+  document.getElementById("headerSection").appendChild(gameHeadingDiv);
   var heading =  document.createElement("h1");
   heading.innerHTML = "Codebreaker";
-  document.getElementById("headingDiv").appendChild(heading);
+  document.getElementById("gameHeadingDiv").appendChild(heading);
   canvas = document.createElement("canvas");
   canvas.setAttribute("height", 400);
   canvas.setAttribute("width", 400);

@@ -1,6 +1,6 @@
-import {initFreecell, unloadFreecell} from './gamemodules/freecell.js';
-import {initMineSweeper, unloadMineSweeper}  from './gamemodules/minesweeper.js';
-import {initCodeBreaker, unloadCodeBreaker} from './gamemodules/codebreaker.js'
+import {initFreecell, unloadFreecell} from './freecell.js';
+import {initMineSweeper, unloadMineSweeper}  from './minesweeper.js';
+import {initCodeBreaker, unloadCodeBreaker} from './codebreaker.js'
 
 var headingDiv;
 var gamelistDiv;
@@ -8,21 +8,26 @@ var backButtonDiv;
 
 window.onload = initDoc;
 function initDoc(){
-  headingDiv = document.createElement("div");
-  headingDiv.setAttribute("id", "headingDiv") ;
-  document.getElementById("headerSection").appendChild(headingDiv);
-  var heading =  document.createElement("h1");
-  heading.innerHTML = "Theo's Vanilla JavaScript Games!";
-  document.getElementById("headingDiv").appendChild(heading);
+  if (!headingDiv) {
+    headingDiv = document.createElement("div");
+    headingDiv.setAttribute("id", "headingDiv") ;
+    document.getElementById("headerSection").appendChild(headingDiv);
+    var heading =  document.createElement("h1");
+    heading.innerHTML = "Theo's Vanilla JavaScript Games!";
+    document.getElementById("headingDiv").appendChild(heading);
+
+  }
   getGameList();
 }
 function getGameList(){
   gamelistDiv = document.createElement("div");
   gamelistDiv.setAttribute("id", "gamelistDiv");
+  gamelistDiv.setAttribute("class", "gamelistDiv");
   document.getElementById("mainSection").appendChild(gamelistDiv);
 
   var freecellDiv = document.createElement("div");
   freecellDiv.setAttribute("id", "freecellDiv");
+  freecellDiv.setAttribute("class", "card");
   document.getElementById("gamelistDiv").appendChild(freecellDiv);
   var freecellH2 = document.createElement("h2");
   freecellH2.innerHTML="Freecell";
@@ -31,6 +36,7 @@ function getGameList(){
   document.getElementById("freecellDiv").appendChild(freecellH2)
   document.getElementById("freecellDiv").appendChild(freecellP);
   var startFreecellButton = document.createElement("button");
+  startFreecellButton.setAttribute("class", "mainButton");
   startFreecellButton.innerHTML = "Start Freecell";
   document.getElementById("freecellDiv").appendChild(startFreecellButton);
   startFreecellButton.addEventListener('click',(e) => {
@@ -40,6 +46,7 @@ function getGameList(){
 
   var minesweeperDiv = document.createElement("div");
   minesweeperDiv.setAttribute("id", "minesweeperDiv");
+  minesweeperDiv.setAttribute("class", "card");
   document.getElementById("gamelistDiv").appendChild(minesweeperDiv);
   var minesweeperH2 = document.createElement("h2");
   minesweeperH2.innerHTML="Minesweeper";
@@ -48,6 +55,7 @@ function getGameList(){
   document.getElementById("minesweeperDiv").appendChild(minesweeperH2);
   document.getElementById("minesweeperDiv").appendChild(minesweeperP);
   var startMinesweeperButton = document.createElement("button");
+  startMinesweeperButton.setAttribute("class", "mainButton");
   startMinesweeperButton.innerHTML = "Start Minesweeper";
   document.getElementById("minesweeperDiv").appendChild(startMinesweeperButton);
   startMinesweeperButton.addEventListener('click',(e) => {
@@ -57,6 +65,7 @@ function getGameList(){
 
   var codebreakerDiv = document.createElement("div");
   codebreakerDiv.setAttribute("id", "codebreakerDiv");
+  codebreakerDiv.setAttribute("class", "card");
   document.getElementById("gamelistDiv").appendChild(codebreakerDiv);
   var codebreakerH2 = document.createElement("h2");
   codebreakerH2.innerHTML="Codebreaker";
@@ -65,6 +74,7 @@ function getGameList(){
   document.getElementById("codebreakerDiv").appendChild(codebreakerH2);
   document.getElementById("codebreakerDiv").appendChild(codebreakerP);
   var startCodebreakerButton = document.createElement("button");
+  startCodebreakerButton.setAttribute("class", "mainButton");
   startCodebreakerButton.innerHTML = "Start Codebreaker";
   document.getElementById("codebreakerDiv").appendChild(startCodebreakerButton);
   startCodebreakerButton.addEventListener('click',(e) => {
@@ -76,7 +86,6 @@ function getGameList(){
 }
 
 function clearDoc(){
-  headingDiv.remove();
   gamelistDiv.remove();
   if (backButtonDiv) {
     backButtonDiv.remove();

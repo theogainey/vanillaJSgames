@@ -7,36 +7,39 @@ var prevN;
 var gameStatus;
 var resetButon;
 var gameCondition;
-var headingDiv;
+var gameHeadingDiv;
 var buttonDiv;
 var canvasDiv;
 var instructionsDiv;
 export function unloadMineSweeper(){
-  headingDiv.remove();
+  gameHeadingDiv.remove();
   buttonDiv.remove();
   canvasDiv.remove();
   instructionsDiv.remove();
 }
 
 export function initMineSweeper() {
-  headingDiv = document.createElement("div");
-  headingDiv.setAttribute("id", "headingDiv") ;
+  gameHeadingDiv = document.createElement("div");
+  gameHeadingDiv.setAttribute("id", "gameHeadingDiv") ;
   buttonDiv  = document.createElement("div");
   buttonDiv.setAttribute("id", "buttonDiv") ;
   canvasDiv = document.createElement("div");
   canvasDiv.setAttribute("id", "canvasDiv") ;
-  document.getElementById("mainSection").appendChild(buttonDiv).appendChild(canvasDiv);
-  document.getElementById("headerSection").appendChild(headingDiv);
+  document.getElementById("mainSection").appendChild(gameHeadingDiv);
+  document.getElementById("mainSection").appendChild(canvasDiv);
+  document.getElementById("mainSection").appendChild(buttonDiv);
   var heading =  document.createElement("h1");
   heading.innerHTML = "Minesweeper";
-  document.getElementById("headingDiv").appendChild(heading);
+  document.getElementById("gameHeadingDiv").appendChild(heading);
 
   instructionsDiv = document.createElement("div");
   instructionsDiv.setAttribute("id", "instructionsDiv");
+  instructionsDiv.setAttribute("class", "instructions");
+
   document.getElementById("mainSection").appendChild(instructionsDiv);
 
   var instructionsH2 = document.createElement("h2");
-  instructionsH2.innerHTML="instructions";
+  instructionsH2.innerHTML="Instructions";
   var instructionsP = document.createElement("p");
   instructionsP.innerHTML = "Click a square to reveal if it contains a mine. When clicked, if a square does not contain a mine, the square will reveal the number of mines adjacent to the square. If the square contains no adjacent mines, all adjacent squares will be automatically clicked for you. Hold the shift key then click to flag a square you believe contains a mine. The game is won when all squares containing mines are marked with flags and every square not containing a mine is clicked. IIf you click a square containing a mine, you lose.";
   document.getElementById("instructionsDiv").appendChild(instructionsH2);

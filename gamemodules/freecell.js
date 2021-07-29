@@ -3,41 +3,42 @@ var ctx;
 var game;
 var undoButton;
 var newGameButton;
-var headingDiv;
+var gameHeadingDiv;
 var buttonDiv;
 var canvasDiv;
 var instructionsDiv;
 
 export function unloadFreecell(){
-  headingDiv.remove();
+  gameHeadingDiv.remove();
   buttonDiv.remove();
   canvasDiv.remove();
   instructionsDiv.remove();
 }
 export function initFreecell(){
-  headingDiv = document.createElement("div");
-  headingDiv.setAttribute("id", "headingDiv") ;
+  gameHeadingDiv = document.createElement("div");
+  gameHeadingDiv.setAttribute("id", "gameHeadingDiv") ;
   buttonDiv  = document.createElement("div");
   buttonDiv.setAttribute("id", "buttonDiv") ;
+  buttonDiv.setAttribute("class", "buttonDiv") ;
+
   canvasDiv = document.createElement("div");
   canvasDiv.setAttribute("id", "canvasDiv") ;
-  document.getElementById("mainSection").appendChild(buttonDiv).appendChild(canvasDiv);
-  document.getElementById("headerSection").appendChild(headingDiv);
+  document.getElementById("mainSection").appendChild(gameHeadingDiv);
+  document.getElementById("mainSection").appendChild(canvasDiv);
+  document.getElementById("mainSection").appendChild(buttonDiv);
   var heading =  document.createElement("h1");
   heading.innerHTML = "Freecell";
-  document.getElementById("headingDiv").appendChild(heading);
+  document.getElementById("gameHeadingDiv").appendChild(heading);
   instructionsDiv = document.createElement("div");
   instructionsDiv.setAttribute("id", "instructionsDiv");
+  instructionsDiv.setAttribute("class", "instructions");
   document.getElementById("mainSection").appendChild(instructionsDiv);
-
   var instructionsH2 = document.createElement("h2");
-  instructionsH2.innerHTML="instructions";
+  instructionsH2.innerHTML="Instructions";
   var instructionsP = document.createElement("p");
   instructionsP.innerHTML = "To win all cards need to be moved to their suit’s respective foundation. Each foundation will only accept cards in order from lowest to highest with ace being the lowest and king the highest. To be able to do this card need to be moved between the four free cells and eight card cascades. Any card that is the last card in a cascade can be moved to a free cell, but each free cell can only hold one card at a time. Any card that is in a free cell or is a last card in a cascade can be moved to another cascade if and only if the card is both of a different color suit and has a value of one lower than the last card in the cascade you wish to move that card to. Nearly every but not every random deal will be winnable, and some deals will be a lot more difficult than others.";
   document.getElementById("instructionsDiv").appendChild(instructionsH2);
   document.getElementById("instructionsDiv").appendChild(instructionsP);
-
-
   canvas = document.createElement("canvas");
   canvas.setAttribute("width", 695);
   canvas.setAttribute("height", 406);
