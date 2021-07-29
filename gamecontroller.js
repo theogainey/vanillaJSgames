@@ -1,6 +1,6 @@
-import {initFreecell, unloadFreecell} from './freecell.js';
-import {initMineSweeper, unloadMineSweeper}  from './minesweeper.js';
-import {initCodeBreaker, unloadCodeBreaker} from './codebreaker.js'
+import {initFreecell, unloadFreecell} from './gamemodules/freecell.js';
+import {initMineSweeper, unloadMineSweeper}  from './gamemodules/minesweeper.js';
+import {initCodeBreaker, unloadCodeBreaker} from './gamemodules/codebreaker.js'
 
 var headingDiv;
 var gamelistDiv;
