@@ -55,13 +55,23 @@ export function initFreecell(){
       item.clickHandler(e.offsetX, e.offsetY,);
     });
     draw();
-    if (game.selectedCard) {
+    if (game.selectedCard instanceof Array) {
+      game.selectedCard.forEach((item, i) => {
+        item.setNewXY(e.offsetX-38, (e.offsetY -50) + (i*15));
+      });
+    }
+    else if (game.selectedCard) {
       game.selectedCard.setNewXY( e.offsetX-38, e.offsetY -50);
-
     }
   });
   canvas.addEventListener('mousemove', e => {
-  if (game.selectedCard) {
+  if (game.selectedCard instanceof Array) {
+    draw();
+    game.selectedCard.forEach((item, i) => {
+      item.setNewXY(e.offsetX-38, (e.offsetY -50) + (i*15));
+    });
+  }
+  else if (game.selectedCard) {
     draw();
     game.selectedCard.setNewXY( e.offsetX-38, e.offsetY -50 );
   }
@@ -116,9 +126,34 @@ function handleNewGameButton(){
   game = new FreeCellGame();
 }
 function handleUndoMove(){
-  if (!(game.selectedCard)) {
+  if (!(game.selectedCard && game.moveStack.stackPointer)) {
+    var undoMoveStackPointer = game.moveStack.stackPointer;
     var lastCardMoved = game.moveStack.pop();
-    if (lastCardMoved) {
+    if (undoMoveStackPointer>1000) {
+      let movesToUndo=lastCardMoved.moves;
+      var cardsBeingMoved=[];
+
+    for (var i = 0; i < movesToUndo.length; i++) {
+      console.log(movesToUndo.length);
+        let thismove = movesToUndo[i];
+        var arraycurrentLocation = thismove[0];
+         var arraypreviousLocation = thismove[1];
+        //remove
+        if (arraycurrentLocation<8) {
+          cardsBeingMoved.push(game.cascades[arraycurrentLocation].pop());
+          game.cascades[arraycurrentLocation].reDraw();
+        }
+      }
+        //now place
+      while (cardsBeingMoved.length>0) {
+        if (arraypreviousLocation<8) {
+         game.cascades[arraypreviousLocation].push(cardsBeingMoved.pop(), true);
+          game.cascades[arraypreviousLocation].reDraw();
+        }
+      }
+    }
+    // old method below here
+    else if (lastCardMoved) {
     var currentLocation = lastCardMoved.currentLocation;
      var previousLocation = lastCardMoved.previousLocation;
     //remove
@@ -152,7 +187,6 @@ function handleUndoMove(){
 }
 class MoveStack {
 
-  //I think I need to fix it here. store move data and not a card
   moves= {};
 
   push(currentLocation, previousLocation){
@@ -170,6 +204,24 @@ class MoveStack {
       this.moves[newKey]={
         currentLocation: currentLocation,
         previousLocation: previousLocation,
+        ptrPrevious:this.stackPointer,
+      };
+      this.stackPointer = newKey
+    }
+  }
+  arrayPush(array){
+    if (!(this.stackPointer)) {
+      var newKey =(1000)+  Math.floor(Math.random() * 52);
+      this.moves[newKey]={
+        moves: array,
+        ptrPrevious:null,
+      };
+      this.stackPointer = newKey
+    }
+    else {
+      var newKey =(1000)+  Math.floor(Math.random() * 52);
+      this.moves[newKey]={
+        moves: array,
         ptrPrevious:this.stackPointer,
       };
       this.stackPointer = newKey
@@ -207,7 +259,10 @@ class FreeSpace{
   clickHandler(x, y){
     if( x> this.x && x<(this.x+75)){
       if (y> this.y && y<(this.y+100)) {
-        if (game.selectedCard && this.isOccupied===false) {
+        if (game.selectedCard instanceof Array) {
+          //do nothing illegal placement
+        }
+        else if (game.selectedCard && this.isOccupied===false) {
           this.push(game.selectedCard);
           game.moveStack.push(this.card.currentLocation, this.card.previousLocation);
         }
@@ -223,6 +278,7 @@ class FreeSpace{
     this.card.setNewXY(this.x, this.y);
     this.isOccupied = true;
     game.selectedCard=null;
+    game.openspots--;
   }
   pop(){
     this.card.previousLocation=this.id;
@@ -230,6 +286,7 @@ class FreeSpace{
     this.card=null;
     this.isOccupied = false;
     this.drawSpace();
+    game.openspots++;
     return tempCard
   }
 }
@@ -256,7 +313,10 @@ class Foundation{
     if( x> this.x && x<(this.x+75)){
       if (y> this.y && y<(this.y+100)) {
         if (game.selectedCard) {
-          if (game.selectedCard.suit===this.suit&&game.selectedCard.value===this.nextValue) {
+          if (game.selectedCard instanceof Array) {
+            //do nothing illegal placement
+          }
+          else if (game.selectedCard.suit===this.suit&&game.selectedCard.value===this.nextValue) {
             let tempCard = game.selectedCard;
             tempCard.currentLocation=this.id;
             this.push(tempCard);
@@ -371,6 +431,7 @@ class FreeCellGame{
     this.foundations= [new Foundation(12, 387, 2,"Hearts"), new Foundation(13, 464, 2, "Clubs"), new Foundation(14, 541, 2,"Diamonds"), new Foundation(15, 618, 2, "Spades")];
     this.moveStack= new MoveStack();
     this.selectedCard = null;
+    this.openspots=4;
   }
   deal(){
     var shuffledDeck = getShuffledCardDeck();
@@ -412,9 +473,83 @@ class Cascade {
     if( x> this.x && x<(this.x+75)){
       if (y> this.y && y<(this.y+(this.count()*15)+100)) {
         if (!game.selectedCard) {
-          game.selectedCard = this.pop();
-          this.perviousTail= game.selectedCard;
-          this.reDraw();
+          var removeMore=false;
+          for (var i = 0; i < this.count()-1; i++) {
+               if (y - this.y <= (i+1)*15 && (y - this.y) > (i*15)) {
+                var cardsToRemove= this.count() - i;
+                 removeMore = true;
+               }
+            }
+          if (removeMore) {
+            let topCard = this.cards[this.tailPtr];
+            let nextCard = this.cards[topCard.ptrPrevious];
+            for (var i = 0; i < cardsToRemove; i++) {
+              if (nextCard.cardData.red!= topCard.cardData.red && nextCard.cardData.value === topCard.cardData.value+1) {
+              }
+              else {
+                removeMore=false;
+                i= cardsToRemove;
+              }
+            }
+          }
+          if (removeMore && (cardsToRemove <= (game.openspots+1))) {
+            var breakCards=[];
+            for (var i = 0; i < cardsToRemove; i++) {
+              breakCards.unshift(this.pop());
+            }
+            game.selectedCard=breakCards;
+          }
+          if(!removeMore) {
+            game.selectedCard = this.pop();
+            this.perviousTail= game.selectedCard;
+            this.reDraw();
+          }
+        }
+        else if (game.selectedCard instanceof Array) {
+          let placed=false;
+          let moveArray=[];
+          for (var i = 0; i < game.selectedCard.length; i++) {
+            let tempCard = game.selectedCard[i];
+            if (tempCard.currentLocation===this.id) {
+              placed=true;
+              this.push(tempCard, true);
+            }
+            else if (tempCard.red===true) {
+              if (this.cards[this.tailPtr]){
+                if (this.cards[this.tailPtr].cardData.red===false && ((tempCard.value + 1) ===this.cards[this.tailPtr].cardData.value)){
+                  placed=true;
+                  this.push(tempCard, true);
+                  moveArray.push([this.id, tempCard.previousLocation]);
+                }
+              }
+              else {
+                placed=true;
+                this.push(tempCard, true);
+                moveArray.push([this.id, tempCard.currentLocation]);
+
+              }
+            }
+            else if (tempCard.red===false) {
+              if (this.cards[this.tailPtr]) {
+                if (this.cards[this.tailPtr].cardData.red===true && ((tempCard.value + 1) ===this.cards[this.tailPtr].cardData.value)) {
+                  placed=true;
+                  this.push(tempCard, true);
+                  moveArray.push([this.id, tempCard.previousLocation]);
+
+                }
+              }
+              else {
+                placed=true;
+                this.push(tempCard, true)
+                moveArray.push([this.id, tempCard.previousLocation]);
+
+              }
+            }
+          }
+          if (placed) {
+            game.selectedCard=null;
+            game.moveStack.arrayPush(moveArray);
+          }
         }
         else if (game.selectedCard.currentLocation===this.id) {
           this.push(game.selectedCard);
@@ -461,7 +596,7 @@ class Cascade {
       pointerNext = tempCard.ptrNext;
     }
   }
-  push(card, isUndo){
+  push(card, specialCase){
     if (!(card instanceof Card) ) {
       card = new Card(card, this.x, this.y+(this.count()*15));
       card.currentLocation = this.id;
@@ -470,8 +605,11 @@ class Cascade {
     else {
       card.setNewXY(this.x, this.y+(this.count()*15));
       card.currentLocation = this.id;
-      if (!isUndo) {
+      if (!specialCase) {
         game.moveStack.push(card.currentLocation, card.previousLocation);
+      }
+      if (!this.tailPtr) {
+        game.openspots--;
       }
     }
     if(this.count()===0){
@@ -508,9 +646,13 @@ class Cascade {
       this.tailPtr=tail.ptrPrevious;
       var returnCard = tail.cardData;
       returnCard.previousLocation=this.id;
+      if (!this.tailPtr) {
+        game.openspots++;
+      }
     return returnCard;
    }
   }
+
   count() {
     var sum =0;
     if (Object.keys(this.cards)){
