@@ -6,6 +6,9 @@ Games and puzzles built in Javascript without the use of any helper libraries<br
 ## FreeCell Solitaire
 Played with a standard 52 card deck, this classic card game is won when the player successfully moves all cards to their respective foundation piles. Included in every release on Windows since 1995, what better game to build with vanilla JavaScript than FreeCell. While the last details still need ironing out, you cand find my version of this classic game in my collection of Vanilla JavaScript Games 
 
+## Asteroids Playground
+The classic game Asteroids, but instead of set levels the player controls how fast their ship moves, how frequently asteroids appear and other settings.  
+
 ## Minesweeper
 As one of the earliest known games to be played on a computer why not take a shot at replicating one the most played computer games of all time. Even the GUI is far from finished, you cand find my version of this classic game in my collection of Vanilla JavaScript Games. 
 
