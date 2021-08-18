@@ -38,7 +38,7 @@ export function initAsteroids(){
   gameHeadingDiv.setAttribute("id", "gameHeadingDiv") ;
   document.getElementById("mainSection").appendChild(gameHeadingDiv);
   var heading =  document.createElement("h1");
-  heading.innerHTML = "Asteroid's Playground";
+  heading.innerHTML = "Asteroids Playground";
   document.getElementById("gameHeadingDiv").appendChild(heading);
   canvasDiv = document.createElement("div");
   canvasDiv.setAttribute("id", "canvasDiv") ;

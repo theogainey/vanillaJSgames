@@ -50,7 +50,7 @@ function getGameList(){
   asteroidsDiv.setAttribute("class", "card");
   document.getElementById("gamelistDiv").appendChild(asteroidsDiv);
   var asteroidsH2 = document.createElement("h2");
-  asteroidsH2.innerHTML="Asteroid's Playground";
+  asteroidsH2.innerHTML="Asteroids Playground";
   var asteroidsP = document.createElement("p");
   asteroidsP.innerHTML = "The classic game of asteroids but instead of set levels, its up to you to decide how fast your ship moves, how frequently asteroids appear, and much more!";
   document.getElementById("asteroidsDiv").appendChild(asteroidsH2);
