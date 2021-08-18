@@ -1,6 +1,7 @@
 import {initFreecell, unloadFreecell} from './gamemodules/freecell.js';
 import {initMineSweeper, unloadMineSweeper}  from './gamemodules/minesweeper.js';
 import {initCodeBreaker, unloadCodeBreaker} from './gamemodules/codebreaker.js'
+import {initAsteroids, unloadAsteroids} from './gamemodules/asteroids.js'
 
 var headingDiv;
 var gamelistDiv;
@@ -43,6 +44,26 @@ function getGameList(){
     clearDoc();
     startFreecell();
   });
+
+  var asteroidsDiv = document.createElement("div");
+  asteroidsDiv.setAttribute("id", "asteroidsDiv");
+  asteroidsDiv.setAttribute("class", "card");
+  document.getElementById("gamelistDiv").appendChild(asteroidsDiv);
+  var asteroidsH2 = document.createElement("h2");
+  asteroidsH2.innerHTML="Asteroid's Playground";
+  var asteroidsP = document.createElement("p");
+  asteroidsP.innerHTML = "The classic game of asteroids but instead of set levels, its up to you to decide how fast your ship moves, how frequently asteroids appear, and much more!";
+  document.getElementById("asteroidsDiv").appendChild(asteroidsH2);
+  document.getElementById("asteroidsDiv").appendChild(asteroidsP);
+  var startAsteroidsButton = document.createElement("button");
+  startAsteroidsButton.setAttribute("class", "mainButton");
+  startAsteroidsButton.innerHTML = "Start Asteroids";
+  document.getElementById("asteroidsDiv").appendChild(startAsteroidsButton);
+  startAsteroidsButton.addEventListener('click',(e) => {
+    clearDoc();
+    startAsteroids();
+  });
+
 
   var minesweeperDiv = document.createElement("div");
   minesweeperDiv.setAttribute("id", "minesweeperDiv");
@@ -105,6 +126,22 @@ function startFreecell(){
     initDoc();
   });
 }
+
+function startAsteroids(){
+  initAsteroids();
+  backButtonDiv = document.createElement("div");
+  backButtonDiv.setAttribute("id", "backButtonDiv");
+  document.getElementById("mainSection").appendChild(backButtonDiv);
+  var backButton = document.createElement("button");
+  backButton.innerHTML = "Back To Games";
+  document.getElementById("backButtonDiv").appendChild(backButton);
+  backButton.addEventListener('click',(e) => {
+    clearDoc();
+    unloadAsteroids();
+    initDoc();
+  });
+}
+
 function startMinesweeper(){
   initMineSweeper();
   backButtonDiv = document.createElement("div");
